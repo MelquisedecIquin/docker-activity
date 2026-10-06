@@ -1,0 +1,21 @@
+---
+- name: Build and run web + DB container
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Build the Docker image
+      community.docker.docker_image:
+        name: web-db-server
+        tag: latest
+        source: build
+        build:
+          path: .
+
+    - name: Run the container
+      community.docker.docker_container:
+        name: web-db
+        image: web-db-server:latest
+        state: started
+        ports:
+          - "8080:80"
+          - "3306:3306"
